@@ -1,41 +1,69 @@
 package grupobioticos.serverprototipo;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
+import org.springframework.web.bind.annotation.*;
+
+import java.net.InetAddress;
+import java.net.NetworkInterface;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
 public class Controller {
 
-    @RequestMapping(value = "/", method = RequestMethod.GET, produces = "text/plain")
+    @Autowired
+    Environment environment;
+
+    @GetMapping(value = "/")
     public String prueba() {
+        System.out.println(environment.getProperty("local.server.port"));
+
         return "respuesta de prueba de la api";
     }
 
-    @RequestMapping(value = "/lecturainformacion", method = RequestMethod.GET, produces = "text/plain")
+    @GetMapping(value = "/lecturainformacion")
     public String lecturaInformacion() {
         System.out.println("Llegó request de LECTURA INFORMACION");
+
+        introducirRetardo(1);
+
         return "lectura de información";
     }
 
-    @RequestMapping(value = "/busquedacoincidencias", method = RequestMethod.GET, produces = "text/plain")
+    @GetMapping(value = "/busquedacoincidencias")
     public String busquedaCoincidencias() {
         System.out.println("Llegó request de BUSQUEDA COINCIDENCIAS");
+
+        introducirRetardo(1);
+
         return "búsqueda de coincidencias";
     }
 
-    @RequestMapping(value = "/construccionensambles", method = RequestMethod.GET, produces = "text/plain")
+    @GetMapping(value = "/construccionensambles")
     public String construccionEnsambles() {
         System.out.println("Llegó request de CONSTRUCCION ENSAMBLES");
+
+        introducirRetardo(1);
+
         return "construcción de ensambles";
     }
 
-    @RequestMapping(value = "/generacioninformes", method = RequestMethod.GET, produces = "text/plain")
+    @GetMapping(value = "/generacioninformes")
     public String generacionInformes() {
         System.out.println("Llegó request de GENERACION INFORMES");
+
+        introducirRetardo(1);
+
         return "generacion de informes";
+    }
+
+    private void introducirRetardo(int cantidadSegundos) {
+        try {
+            Thread.sleep(cantidadSegundos * 1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
 }

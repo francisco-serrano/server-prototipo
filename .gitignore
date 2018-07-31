@@ -27,3 +27,10 @@
 /mvnw
 /mvnw.cmd
 /.gitignore
+/examples/
+/genomas/
+/TruSeq3-PE.fa
+/cadena_ejemplo.txt
+/genoma.jpg
+/Result.jpg
+/src/main/resources/lib/
