@@ -31,14 +31,11 @@ public class Controller {
     public String lecturaInformacion() {
         System.out.println("Llegó request de LECTURA INFORMACION");
 
-        int port = Integer.parseInt(Objects.requireNonNull(environment.getProperty("local.server.port")));
+//        int port = Integer.parseInt(Objects.requireNonNull(environment.getProperty("local.server.port")));
 
-        if (port == 8080)
-            System.out.println(this.configuration.getSubgrupo_1());
-        else
-            System.out.println("Server corriendo de forma remota");
+        System.out.println("COMANDO A EJECUTAR: " + this.configuration.getSubgrupo_1());
 
-        introducirRetardo(1);
+//        introducirRetardo(1);
 
         return "lectura de información";
     }
