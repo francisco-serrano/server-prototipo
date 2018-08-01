@@ -9,7 +9,7 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 
 @RestController
-@CrossOrigin(origins = {"http://localhost:4200", "https://client-prototipo.herokuapp.com/"})
+@CrossOrigin(origins = {"http://localhost:4200", "https://client-prototipo.herokuapp.com"})
 public class Controller {
 
     @Autowired
