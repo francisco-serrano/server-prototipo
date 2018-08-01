@@ -17,7 +17,8 @@ public class Controller {
 
     @GetMapping(value = "/")
     public String prueba() {
-        System.out.println(environment.getProperty("local.server.port"));
+        System.out.println("PORT: " + environment.getProperty("local.server.port"));
+        System.out.println("ADDRESS: " + environment.getProperty("local.server.address"));
 
         return "respuesta de prueba de la api";
     }
