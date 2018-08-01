@@ -1,19 +1,24 @@
 package grupobioticos.serverprototipo;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.InetAddress;
-import java.net.NetworkInterface;
+import java.util.Objects;
 
 @RestController
 @CrossOrigin(origins = {"http://localhost:4200", "https://client-prototipo.herokuapp.com"})
 public class Controller {
 
+    private CommandsConfiguration configuration;
+
     @Autowired
     Environment environment;
+
+    @Autowired
+    public void setConfiguration(CommandsConfiguration configuration) {
+        this.configuration = configuration;
+    }
 
     @GetMapping(value = "/")
     public String prueba() {
@@ -25,6 +30,13 @@ public class Controller {
     @GetMapping(value = "/lecturainformacion")
     public String lecturaInformacion() {
         System.out.println("Llegó request de LECTURA INFORMACION");
+
+        int port = Integer.parseInt(Objects.requireNonNull(environment.getProperty("local.server.port")));
+
+        if (port == 8080)
+            System.out.println(this.configuration.getSubgrupo_1());
+        else
+            System.out.println("Server corriendo de forma remota");
 
         introducirRetardo(1);
 

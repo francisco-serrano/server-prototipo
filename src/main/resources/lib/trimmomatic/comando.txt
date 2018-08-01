@@ -1,0 +1,1 @@
+java -jar lib/trimmomatic/trimmomatic-0.38.jar PE -phred33 genomas/A5-1.fq genomas/A5-2.fq output_forward_paired.fq output_forward_unpaired.fq output_reverse_paired.fq output_reverse_unpaired.fq ILLUMINACLIP:TruSeq3-PE.fa:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:36

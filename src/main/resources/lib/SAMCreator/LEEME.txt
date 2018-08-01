@@ -1,0 +1,11 @@
+Examples tiene los archivos para ejecutar esto:
+Archivo de ref: AlligatorMito.fa
+Archivo de salida: seleccionar el que prefieras.
+
+Opcionales:
+Se puede agregar si es con mate-pair o paired-end. El ultimo esta por default.
+Archivo de error 1:hiseq_mito_default_bwa_mapping_mq10_1.txt
+Archivo de error 2:hiseq_mito_default_bwa_mapping_mq10_2.txt
+
+Preparar...
+Luego se puede limpiar la preparacion (comenzar de nuevo) o Ejecutar.
