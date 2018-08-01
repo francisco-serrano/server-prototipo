@@ -9,7 +9,7 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = {"http://localhost:4200", "https://client-prototipo.herokuapp.com/"})
 public class Controller {
 
     @Autowired
@@ -18,7 +18,6 @@ public class Controller {
     @GetMapping(value = "/")
     public String prueba() {
         System.out.println("PORT: " + environment.getProperty("local.server.port"));
-        System.out.println("ADDRESS: " + environment.getProperty("local.server.address"));
 
         return "respuesta de prueba de la api";
     }
