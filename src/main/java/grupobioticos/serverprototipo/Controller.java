@@ -56,8 +56,13 @@ public class Controller {
     }
 
     @GetMapping(value = "/construccionensambles")
-    public String construccionEnsambles() {
+    public String construccionEnsambles(
+            @RequestParam(value="archivo_entrada") String archivoEntrada,
+            @RequestParam(value="opcion_ensamble") String opcionEnsamble,
+            @RequestParam(value="archivo_salida") String archivoSalida
+    ) {
         System.out.println("Llegó request de CONSTRUCCION ENSAMBLES");
+        System.out.printf("PARAMETROS RECIBIDOS -> %s, %s, %s\n", archivoEntrada, opcionEnsamble, archivoSalida);
 
         if (runningLocal)
             runCommand(this.configuration.getSubgrupo_3());
