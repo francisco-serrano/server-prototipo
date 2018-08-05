@@ -5,6 +5,8 @@ import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 @RestController
@@ -46,8 +48,13 @@ public class Controller {
     }
 
     @GetMapping(value = "/busquedacoincidencias")
-    public String busquedaCoincidencias() {
+    public String busquedaCoincidencias(
+            @RequestParam(value="archivo_referencia") String archivoReferencia,
+            @RequestParam(value="genoma_analizar") String genomaAnalizar,
+            @RequestParam(value="archivo_salida") String archivoSalida
+    ) {
         System.out.println("Llegó request de BUSQUEDA COINCIDENCIAS");
+        System.out.printf("PARAMETROS RECIBIDOS -> %s, %s, %s\n", archivoReferencia, genomaAnalizar, archivoSalida);
 
         if (runningLocal)
             runCommand(this.configuration.getSubgrupo_2());
@@ -71,8 +78,14 @@ public class Controller {
     }
 
     @GetMapping(value = "/generacioninformes")
-    public String generacionInformes() {
+    public String generacionInformes(
+            @RequestParam(value = "archivo_1") String archivo1,
+            @RequestParam(value = "archivo_2") String archivo2,
+            @RequestParam(value = "archivo_3") String archivo3
+
+    ) {
         System.out.println("Llegó request de GENERACION INFORMES");
+        System.out.printf("PARAMETROS RECIBIDOS -> %s, %s, %s\n", archivo1, archivo2, archivo3);
 
         if (runningLocal)
             runCommand(this.configuration.getSubgrupo_4());
@@ -88,6 +101,14 @@ public class Controller {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private Map<String, Object> generateOutput(String message, Map<String, Object> additionalData) {
+        Map<String, Object> jsonRetornar = new HashMap<>();
+        jsonRetornar.put("Mensaje", message);
+        jsonRetornar.put("Información Adicional", additionalData);
+
+        return jsonRetornar;
     }
 
 }
