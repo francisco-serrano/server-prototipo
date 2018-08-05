@@ -16,6 +16,15 @@ public class CommandsConfiguration {
     @Value("${subgrupo_2}")
     private String subgrupo_2;
 
+    @Value("${subgrupo_2_1}")
+    private String subgrupo_2_1;
+
+    @Value("${subgrupo_2_2}")
+    private String subgrupo_2_2;
+
+    @Value("${subgrupo_2_3}")
+    private String subgrupo_2_3;
+
     @Value("${subgrupo_3}")
     private String subgrupo_3;
 

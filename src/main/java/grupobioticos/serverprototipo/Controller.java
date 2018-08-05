@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -18,18 +17,18 @@ import java.util.Objects;
 })
 public class Controller {
 
-    private CommandsConfiguration configuration;
     private boolean runningLocal;
+    private Model model;
 
     @Autowired
     public void setConfiguration(CommandsConfiguration configuration) {
-        this.configuration = configuration;
+        this.model = new Model(configuration);
     }
 
     @Autowired
     public void setPort(Environment environment) {
         int port = Integer.parseInt(Objects.requireNonNull(environment.getProperty("server.port")));
-        this.runningLocal = port == 8080;
+        this.runningLocal = (port == 8080);
     }
 
     @GetMapping(value = "/")
@@ -37,75 +36,80 @@ public class Controller {
         return "respuesta de prueba de la api";
     }
 
-    @GetMapping(value = "/lecturainformacion")
-    public String lecturaInformacion() {
+    @GetMapping(value = "/lecturainformacion", produces = "application/json")
+    public Map<String, Object> lecturaInformacion(
+            @RequestParam(value = "reads_in_1") String readsIn1,
+            @RequestParam(value = "reads_in_2") String readsIn2,
+            @RequestParam(value = "reads_out_1") String readsOut1,
+            @RequestParam(value = "reads_out_2") String readsOut2
+
+    ) {
         System.out.println("Llegó request de LECTURA INFORMACION");
 
-        if (runningLocal)
-            runCommand(this.configuration.getSubgrupo_1());
+        String resultado = "Lectura de Información en la nube no implementada";
 
-        return String.format("lectura de información - runningLocal: %s", this.runningLocal);
+        if (runningLocal)
+            resultado = model.lecturaInformacion(readsIn1, readsIn2, readsOut1, readsOut2);
+
+        return generateOutput(resultado, runningLocal);
     }
 
-    @GetMapping(value = "/busquedacoincidencias")
-    public String busquedaCoincidencias(
-            @RequestParam(value="archivo_referencia") String archivoReferencia,
-            @RequestParam(value="genoma_analizar") String genomaAnalizar,
-            @RequestParam(value="archivo_salida") String archivoSalida
+    @GetMapping(value = "/busquedacoincidencias", produces = "application/json")
+    public Map<String, Object> busquedaCoincidencias(
+            @RequestParam(value = "archivo_referencia") String archivoReferencia,
+            @RequestParam(value = "genoma_analizar") String genomaAnalizar,
+            @RequestParam(value = "archivo_salida") String archivoSalida
     ) {
         System.out.println("Llegó request de BUSQUEDA COINCIDENCIAS");
-        System.out.printf("PARAMETROS RECIBIDOS -> %s, %s, %s\n", archivoReferencia, genomaAnalizar, archivoSalida);
+        String resultado = "Búsqueda de Coincidencias en la nube no implementada";
 
         if (runningLocal)
-            runCommand(this.configuration.getSubgrupo_2());
+            resultado = model.busquedaCoincidencias(archivoReferencia, genomaAnalizar, archivoSalida);
 
-        return String.format("búsqueda de coincidencias - runningLocal: %s", this.runningLocal);
+        return generateOutput(resultado, runningLocal);
     }
 
-    @GetMapping(value = "/construccionensambles")
-    public String construccionEnsambles(
-            @RequestParam(value="archivo_entrada") String archivoEntrada,
-            @RequestParam(value="opcion_ensamble") String opcionEnsamble,
-            @RequestParam(value="archivo_salida") String archivoSalida
+    @GetMapping(value = "/construccionensambles", produces = "application/json")
+    public Map<String, Object> construccionEnsambles(
+            @RequestParam(value = "archivo_entrada") String archivoEntrada,
+            @RequestParam(value = "opcion_ensamble") String opcionEnsamble,
+            @RequestParam(value = "archivo_salida") String archivoSalida
     ) {
         System.out.println("Llegó request de CONSTRUCCION ENSAMBLES");
-        System.out.printf("PARAMETROS RECIBIDOS -> %s, %s, %s\n", archivoEntrada, opcionEnsamble, archivoSalida);
+        String resultado = "Construcción de Ensambles en la nube no implementada";
 
         if (runningLocal)
-            runCommand(this.configuration.getSubgrupo_3());
+            resultado = model.construccionEnsambles(archivoEntrada, opcionEnsamble, archivoSalida);
 
-        return String.format("construcción de ensambles - runningLocal: %s", this.runningLocal);
+        return generateOutput(resultado, runningLocal);
     }
 
-    @GetMapping(value = "/generacioninformes")
-    public String generacionInformes(
+    @GetMapping(value = "/generacioninformes", produces = "application/json")
+    public Map<String, Object> generacionInformes(
             @RequestParam(value = "archivo_1") String archivo1,
             @RequestParam(value = "archivo_2") String archivo2,
             @RequestParam(value = "archivo_3") String archivo3
 
     ) {
         System.out.println("Llegó request de GENERACION INFORMES");
-        System.out.printf("PARAMETROS RECIBIDOS -> %s, %s, %s\n", archivo1, archivo2, archivo3);
+        String resultado = "Generación de Informes en la nube no implementada";
 
         if (runningLocal)
-            runCommand(this.configuration.getSubgrupo_4());
+            resultado = model.generacionInformes(archivo1, archivo2, archivo3);
 
-        return String.format("generacion de informes - runningLocal: %s", this.runningLocal);
+        return generateOutput(resultado, runningLocal);
     }
 
-    private void runCommand(String command) {
-        System.out.println("COMANDO A EJECUTAR: " + command);
-
-        try {
-            Runtime.getRuntime().exec(command);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private Map<String, Object> generateOutput(String message, Map<String, Object> additionalData) {
+    private Map<String, Object> generateOutput(String message, boolean runningLocal) {
         Map<String, Object> jsonRetornar = new HashMap<>();
-        jsonRetornar.put("Mensaje", message);
+        jsonRetornar.put("mensaje", message);
+        jsonRetornar.put("runningLocal", runningLocal);
+
+        return jsonRetornar;
+    }
+
+    private Map<String, Object> generateOutput(String message, boolean runningLocal, Map<String, Object> additionalData) {
+        Map<String, Object> jsonRetornar = generateOutput(message, runningLocal);
         jsonRetornar.put("Información Adicional", additionalData);
 
         return jsonRetornar;
