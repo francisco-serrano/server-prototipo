@@ -3,7 +3,6 @@ package grupobioticos.serverprototipo;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Optional;
 
 public class Model {
 
@@ -73,8 +72,14 @@ public class Model {
             String opcionEnsamble,
             String archivoSalida
     ) {
+        String comandoEjecutar = this.configuration.getSubgrupo_3();
+
+        comandoEjecutar = !archivoEntrada.equals("undefined") ? comandoEjecutar.replace("examples/AlligatorMito.fa", archivoEntrada) : comandoEjecutar;
+        comandoEjecutar = opcionEnsamble.equals("Paired-End") ? comandoEjecutar.replace("--mate_pair ", "") : comandoEjecutar;
+        comandoEjecutar = !archivoSalida.equals("undefined") ? comandoEjecutar.replace("out.sam", archivoSalida) :  comandoEjecutar;
+
         System.out.printf("%s. Parámetros -> %s, %s, %s\n", "Construcción de Ensambles", archivoEntrada, opcionEnsamble, archivoSalida);
-        runCommand(this.configuration.getSubgrupo_3());
+        runCommand(comandoEjecutar);
         return "Construcción de Ensambles realizada";
     }
 
