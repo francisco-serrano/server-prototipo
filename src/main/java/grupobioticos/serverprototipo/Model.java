@@ -89,7 +89,16 @@ public class Model {
             String archivo3
     ) {
         System.out.printf("%s. Parámetros -> %s, %s, %s\n", "Generación de Informes", archivo1, archivo2, archivo3);
-        runCommand(this.configuration.getSubgrupo_4());
+//        runCommand(this.configuration.getSubgrupo_4());
+
+        String comandoEjecutar = this.configuration.getSubgrupo_4();
+
+        comandoEjecutar = !archivo1.equals("undefined") ? comandoEjecutar.replace("./genomas/A5-1.fq", archivo1) : comandoEjecutar;
+        comandoEjecutar = !archivo2.equals("undefined") ? comandoEjecutar + " " + archivo2 : comandoEjecutar;
+        comandoEjecutar = !archivo3.equals("undefined") ? comandoEjecutar + " " + archivo3 : comandoEjecutar;
+
+        runCommand(comandoEjecutar);
+
         return "Generación de Informes realizada";
     }
 
