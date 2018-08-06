@@ -46,4 +46,16 @@ public class CommandsConfiguration {
     public String getSubgrupo_4() {
         return subgrupo_4;
     }
+
+    public String getSubgrupo_2_1() {
+        return subgrupo_2_1;
+    }
+
+    public String getSubgrupo_2_2() {
+        return subgrupo_2_2;
+    }
+
+    public String getSubgrupo_2_3() {
+        return subgrupo_2_3;
+    }
 }
