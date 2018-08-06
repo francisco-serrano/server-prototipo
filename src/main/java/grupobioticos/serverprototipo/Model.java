@@ -19,7 +19,16 @@ public class Model {
             String readsOut2
     ) {
         System.out.printf("%s. Parámetros -> %s, %s, %s, %s\n", "Lectura de Información", readsIn1, readsIn2, readsOut1, readsOut2);
-        runCommand(this.configuration.getSubgrupo_1());
+
+        String comandoEjecutar = this.configuration.getSubgrupo_1();
+
+        comandoEjecutar = !readsIn1.equals("undefined") ? comandoEjecutar.replace("genomas/A5-1.fq", readsIn1) : comandoEjecutar;
+        comandoEjecutar = !readsIn2.equals("undefined") ? comandoEjecutar.replace("genomas/A5-2.fq", readsIn2) : comandoEjecutar;
+        comandoEjecutar = !readsOut1.equals("undefined") ? comandoEjecutar.replace("output_forward_paired.fq", readsOut1) : comandoEjecutar;
+        comandoEjecutar = !readsOut2.equals("undefined") ? comandoEjecutar.replace("output_reverse_paired.fq", readsOut2) : comandoEjecutar;
+
+        runCommand(comandoEjecutar);
+
         return "Lectura de Información realizada";
     }
 
@@ -89,7 +98,6 @@ public class Model {
             String archivo3
     ) {
         System.out.printf("%s. Parámetros -> %s, %s, %s\n", "Generación de Informes", archivo1, archivo2, archivo3);
-//        runCommand(this.configuration.getSubgrupo_4());
 
         String comandoEjecutar = this.configuration.getSubgrupo_4();
 
