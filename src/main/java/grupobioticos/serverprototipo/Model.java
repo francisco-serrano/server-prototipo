@@ -3,6 +3,7 @@ package grupobioticos.serverprototipo;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Optional;
 
 public class Model {
 
@@ -29,25 +30,32 @@ public class Model {
             String archivoSalida
     ) {
         System.out.printf("%s. Parámetros -> %s, %s, %s\n", "Búsqueda de Coincidencias", archivoReferencia, genomaAnalizar, archivoSalida);
-//        runCommand(this.configuration.getSubgrupo_2());
+
+        String comando_1 = this.configuration.getSubgrupo_2_1();
+        String comando_2 = this.configuration.getSubgrupo_2_2();
+        String comando_3 = this.configuration.getSubgrupo_2_3();
+
+        comando_1 = !archivoReferencia.equals("undefined") ? comando_1.replace("mrna.fa", archivoReferencia) : comando_1;
+        comando_3 = !genomaAnalizar.equals("undefined") ? comando_3.replace("CRR019982_f1.fq", genomaAnalizar) : comando_3;
+        comando_3 = !archivoSalida.equals("undefined") ? comando_3.replace("salida.sam", archivoSalida) : comando_3;
 
         try {
             String line;
-            Process p = Runtime.getRuntime().exec(this.configuration.getSubgrupo_2_1());
+            Process p = Runtime.getRuntime().exec(comando_1);
             BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
             while ((line = input.readLine()) != null)
                 System.out.println(line);
 
             input.close();
 
-            p = Runtime.getRuntime().exec(this.configuration.getSubgrupo_2_2());
+            p = Runtime.getRuntime().exec(comando_2);
             input = new BufferedReader(new InputStreamReader(p.getInputStream()));
             while ((line = input.readLine()) != null)
                 System.out.println(line);
 
             input.close();
 
-            p = Runtime.getRuntime().exec(this.configuration.getSubgrupo_2_3());
+            p = Runtime.getRuntime().exec(comando_3);
             input = new BufferedReader(new InputStreamReader(p.getInputStream()));
             while ((line = input.readLine()) != null)
                 System.out.println(line);
