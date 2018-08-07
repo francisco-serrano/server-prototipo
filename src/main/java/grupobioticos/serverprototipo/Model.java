@@ -1,12 +1,15 @@
 package grupobioticos.serverprototipo;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 
 public class Model {
 
     private CommandsConfiguration configuration;
+
+    private static final String MENSAJE_LECTURA_INFORMACION = "Lectura de Información realizada. Salida almacenada en %s y %s";
+    private static final String MENSAJE_BUSQUEDA_COINCIDENCIAS = "Búsqueda de Coincidencias realizada. Salida almacenada en %s";
+    private static final String MENSAJE_CONSTRUCCION_ENSAMBLES = "Construcción de Ensambles realizada. Salida almacenada en %s";
+    private static final String MENSAJE_GENERACION_INFORMES = "Generación de Informes realizada a partir del archivo %s";
 
     public Model(CommandsConfiguration configuration) {
         this.configuration = configuration;
@@ -22,14 +25,17 @@ public class Model {
 
         String comandoEjecutar = this.configuration.getSubgrupo_1();
 
-        comandoEjecutar = !readsIn1.equals("undefined") ? comandoEjecutar.replace("genomas/A5-1.fq", readsIn1) : comandoEjecutar;
-        comandoEjecutar = !readsIn2.equals("undefined") ? comandoEjecutar.replace("genomas/A5-2.fq", readsIn2) : comandoEjecutar;
-        comandoEjecutar = !readsOut1.equals("undefined") ? comandoEjecutar.replace("output_forward_paired.fq", readsOut1) : comandoEjecutar;
-        comandoEjecutar = !readsOut2.equals("undefined") ? comandoEjecutar.replace("output_reverse_paired.fq", readsOut2) : comandoEjecutar;
+        comandoEjecutar = !readsIn1.equals("undefined") && !readsIn1.equals("") ? comandoEjecutar.replace("genomas/A5-1.fq", readsIn1) : comandoEjecutar;
+        comandoEjecutar = !readsIn2.equals("undefined") && !readsIn2.equals("") ? comandoEjecutar.replace("genomas/A5-2.fq", readsIn2) : comandoEjecutar;
+        comandoEjecutar = !readsOut1.equals("undefined") && !readsOut1.equals("") ? comandoEjecutar.replace("output_forward_paired.fq", readsOut1) : comandoEjecutar;
+        comandoEjecutar = !readsOut2.equals("undefined") && !readsOut2.equals("") ? comandoEjecutar.replace("output_reverse_paired.fq", readsOut2) : comandoEjecutar;
 
         runCommand(comandoEjecutar);
 
-        return "Lectura de Información realizada";
+        if ((!readsOut1.equals("undefined") && !readsOut1.equals("")) || (!readsOut2.equals("undefined") && !readsOut2.equals("")))
+            return String.format(MENSAJE_LECTURA_INFORMACION, readsOut1, readsOut2);
+
+        return String.format(MENSAJE_LECTURA_INFORMACION, "output_forward_paired.fq", "output_reverse_paired.fq");
     }
 
     public String busquedaCoincidencias(
@@ -43,37 +49,24 @@ public class Model {
         String comando_2 = this.configuration.getSubgrupo_2_2();
         String comando_3 = this.configuration.getSubgrupo_2_3();
 
-        comando_1 = !archivoReferencia.equals("undefined") ? comando_1.replace("mrna.fa", archivoReferencia) : comando_1;
-        comando_3 = !genomaAnalizar.equals("undefined") ? comando_3.replace("CRR019982_f1.fq", genomaAnalizar) : comando_3;
-        comando_3 = !archivoSalida.equals("undefined") ? comando_3.replace("salida.sam", archivoSalida) : comando_3;
+        comando_1 = (!archivoReferencia.equals("undefined") && !archivoReferencia.equals("")) ? comando_1.replace("mrna.fa", archivoReferencia) : comando_1;
+        comando_3 = (!genomaAnalizar.equals("undefined") && !genomaAnalizar.equals(""))? comando_3.replace("CRR019982_f1.fq", genomaAnalizar) : comando_3;
+        comando_3 = (!archivoSalida.equals("undefined") && !genomaAnalizar.equals(""))? comando_3.replace("salida.sam", archivoSalida) : comando_3;
 
         try {
-            String line;
             Process p = Runtime.getRuntime().exec(comando_1);
-            BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
-            while ((line = input.readLine()) != null)
-                System.out.println(line);
-
-            input.close();
 
             p = Runtime.getRuntime().exec(comando_2);
-            input = new BufferedReader(new InputStreamReader(p.getInputStream()));
-            while ((line = input.readLine()) != null)
-                System.out.println(line);
-
-            input.close();
 
             p = Runtime.getRuntime().exec(comando_3);
-            input = new BufferedReader(new InputStreamReader(p.getInputStream()));
-            while ((line = input.readLine()) != null)
-                System.out.println(line);
-
-            input.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        return "Búsqueda de Coincidencias realizada";
+        if (archivoSalida.equals("undefined") || archivoSalida.equals(""))
+            return String.format(MENSAJE_BUSQUEDA_COINCIDENCIAS, "salida.sam");
+
+        return String.format(MENSAJE_BUSQUEDA_COINCIDENCIAS, archivoSalida);
     }
 
     public String construccionEnsambles(
@@ -89,7 +82,11 @@ public class Model {
 
         System.out.printf("%s. Parámetros -> %s, %s, %s\n", "Construcción de Ensambles", archivoEntrada, opcionEnsamble, archivoSalida);
         runCommand(comandoEjecutar);
-        return "Construcción de Ensambles realizada";
+
+        if (archivoSalida.equals("undefined") || archivoSalida.equals(""))
+            return String.format(MENSAJE_CONSTRUCCION_ENSAMBLES, "out.sam");
+
+        return String.format(MENSAJE_CONSTRUCCION_ENSAMBLES, archivoSalida);
     }
 
     public String generacionInformes(
@@ -107,7 +104,10 @@ public class Model {
 
         runCommand(comandoEjecutar);
 
-        return "Generación de Informes realizada";
+        if (archivo3.equals("undefined") || archivo3.equals(""))
+            return String.format(MENSAJE_GENERACION_INFORMES, "./genomas/A5-1.fq");
+
+        return String.format(MENSAJE_GENERACION_INFORMES, archivo1);
     }
 
     private void runCommand(String command) {

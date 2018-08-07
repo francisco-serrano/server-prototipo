@@ -108,11 +108,11 @@ public class Controller {
         return jsonRetornar;
     }
 
-    private Map<String, Object> generateOutput(String message, boolean runningLocal, Map<String, Object> additionalData) {
-        Map<String, Object> jsonRetornar = generateOutput(message, runningLocal);
-        jsonRetornar.put("Información Adicional", additionalData);
-
-        return jsonRetornar;
-    }
+//    private Map<String, Object> generateOutput(String message, boolean runningLocal, Map<String, Object> additionalData) {
+//        Map<String, Object> jsonRetornar = generateOutput(message, runningLocal);
+//        jsonRetornar.put("Información Adicional", additionalData);
+//
+//        return jsonRetornar;
+//    }
 
 }
